@@ -1,0 +1,32 @@
+{
+    "Nome":"",
+    "Duraca":0,
+    "Npessoas":0,
+    "Dificuldade":"",
+    "Preparacao":"",
+    "Ingredientes":[
+        {
+            "Nome":"",
+            "Quantidade":""
+        }
+    ],
+    "Categoria":"",
+    "Gostos":0,
+    "Publico":false,
+    "idUtilizador":0
+}
+
+
+{
+    "id":0,
+    "Nome":"",
+    "Email":"",
+    "Password":"",
+    "Notficaçoes": [    
+        {
+            "UtilizadorGostou":"id",
+            "IdReceita":"id",
+            "lida":false
+        }
+    ]
+}

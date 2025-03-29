@@ -75,6 +75,9 @@ class utilizador {
         }
     }
 
+    //TODO fazer ler notificaçao
+
+
 }
 
 module.exports = utilizador
