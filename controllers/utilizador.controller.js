@@ -92,6 +92,9 @@ class utilizador {
             }
             const item = await this.utilizadorDao.find(querySpec)
 
+            console.log(req.body.Password)
+            console.log(item)
+
             const correctPassowrd = await bcrypt.compare(req.body.Password,item.Password)
 
             if(!correctPassowrd){
