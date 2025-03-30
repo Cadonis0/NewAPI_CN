@@ -9,7 +9,7 @@ class receita {
     async showReceitasPublicas(req,res){
         try{
             const querySpec = {
-                query: "SELECT * FROM receitas r WHERE r.Publicado=@publicado",
+                query: "SELECT * FROM receitas r WHERE r.Publico=@publicado",
                 parameters: [
                     {
                         name: "@publicado",
