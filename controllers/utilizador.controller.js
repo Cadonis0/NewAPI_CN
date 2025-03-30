@@ -1,5 +1,6 @@
 const utilizadorDao = require("../models/utilizadorDao")
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 class utilizador {
 
@@ -75,8 +76,37 @@ class utilizador {
         }
     }
 
-    //TODO fazer ler notificaçao
+    //TODO fazer ler/eliminar notificaçoes
 
+    async loginUtilizador(req,res) {
+        try{
+
+            const querySpec = {
+                query: "SELECT u.Password, u.id FROM Utilizadore u WHERE u.Email = @email",
+                parameters: [
+                    {
+                        name: "@email",
+                        value: req.body.Email
+                    }
+                ]
+            }
+            const item = await this.utilizadorDao.find(querySpec)
+
+            const correctPassowrd = await bcrypt.compare(req.body.Password,item.Password)
+
+            if(!correctPassowrd){
+                return res.status(404).json({mensagem:"Email ou password errado"})
+            }
+    
+            const token = jwt.sign({id:item.id},process.env.JWT_SECRET,{expiresIn: process.env.JWT_LIFETIME})
+    
+            res.status(200).json({token})
+
+        }catch(err){
+            console.log(err)
+            res.status(500).json({mensagem:"Erro a fazer login"})
+        }
+    }
 
 }
 
