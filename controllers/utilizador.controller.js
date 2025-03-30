@@ -82,7 +82,7 @@ class utilizador {
         try{
 
             const querySpec = {
-                query: "SELECT u.Password, u.id FROM Utilizadore u WHERE u.Email = @email",
+                query: "SELECT * FROM Utilizadores u WHERE u.Email = @email",
                 parameters: [
                     {
                         name: "@email",
