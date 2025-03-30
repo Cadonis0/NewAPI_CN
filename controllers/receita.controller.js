@@ -65,10 +65,10 @@ class receita {
     async addReceita(req, res) {
         try{
             const item = req.body;
-            item.IdUtilizador = req.user.userId
+            //item.IdUtilizador = req.user.userId
 
-            await this.receitaDao.addItem(item);
-            res.status(201).json("Ok")
+            const saved = await this.receitaDao.addItem(item);
+            res.status(201).json(saved)
         }catch(err){
             console.log(err)
             res.status(500).json({mensagem:"Erro a adicionar receita"})
