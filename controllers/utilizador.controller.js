@@ -95,7 +95,7 @@ class utilizador {
             console.log(req.body.Password)
             console.log(item)
 
-            const correctPassowrd = await bcrypt.compare(req.body.Password,item.Password)
+            const correctPassowrd = await bcrypt.compare(req.body.Password,item[0].Password)
 
             if(!correctPassowrd){
                 return res.status(404).json({mensagem:"Email ou password errado"})
