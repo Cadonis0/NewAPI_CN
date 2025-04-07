@@ -69,6 +69,7 @@ class receita {
     async addReceita(req, res) {
         try{
 
+            /*
             const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING);
             const containerClient = blobServiceClient.getContainerClient(containerName);
             
@@ -79,8 +80,8 @@ class receita {
                 blobHTTPHeaders: { blobContentType: req.file.mimetype },
               });
             
-
             console.log(blockBlobClient.url)
+            */
 
             const item = req.body;
             item.IdUtilizador = req.user.userId

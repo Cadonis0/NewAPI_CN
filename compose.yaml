@@ -13,8 +13,13 @@ services:
       context: .
     environment:
       NODE_ENV: production
+      JWT_SECRET: amarelo123
+      JWT_LIFETIME: 30d
+      PORT: 4000
+      HOST: https://base-dados-trabalho-cn.documents.azure.com/
+      AUTH_KEY: dsggoFAccAVz5pU1njOCPXzXupF3mPOQPEagejUhrEJXVRjfmjtvBdP4yBdcMwUf3T7nkhiKlj1HACDbc0NSKg==
     ports:
-      - 3000:3000
+      - 4000:4000
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
