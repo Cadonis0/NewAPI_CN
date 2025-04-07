@@ -1,4 +1,9 @@
 const receitaDao = require("../models/receitaDao")
+const { BlobServiceClient } = require('@azure/storage-blob');
+const multer = require('multer');
+
+const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
+const containerName = 'imagens';
 
 class receita {
 
@@ -60,12 +65,25 @@ class receita {
         }
     }
 
-    //TODO testar
     //TODO fazer parte da image
     async addReceita(req, res) {
         try{
+
+            const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING);
+            const containerClient = blobServiceClient.getContainerClient(containerName);
+            
+            const blobName = Date.now() + "-" + req.file.originalname;
+            const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+            
+            await blockBlobClient.uploadData(req.file.buffer, {
+                blobHTTPHeaders: { blobContentType: req.file.mimetype },
+              });
+            
+
+            console.log(blockBlobClient.url)
+
             const item = req.body;
-            //item.IdUtilizador = req.user.userId
+            item.IdUtilizador = req.user.userId
 
             const saved = await this.receitaDao.addItem(item);
             res.status(201).json(saved)
@@ -77,20 +95,25 @@ class receita {
 
     async likeRecita(req, res) {
         try{
-            const id = req.params.id
+            const idReceita = req.params.id
+            const idUtilizador = req.user.userId
+            const linkFunction = process.env.LINKFUNCTION
 
-            await this.receitaDao.likeItem(id)
+            await this.receitaDao.likeItem(idReceita)
 
             //TODO fazer pedido ao function
-            await fetch('link',{
+            
+            const resp = await fetch(linkFunction,{
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    UtilizadorGostou:id,
-                    IdReceita:id,
+                    UtilizadorGostou:idUtilizador,
+                    IdReceita:idReceita,
                     lida:false
                 })
             })
+            const resposta = resp.json()
+            //if()
 
             res.status(200).json({mensagem:"Gostado com sucesso"})
         }catch(err){

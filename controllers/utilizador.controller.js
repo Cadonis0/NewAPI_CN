@@ -50,7 +50,6 @@ class utilizador {
         }
     }
 
-    //TODO como fazer com password
     async updateUtilizador(req,res) {
         try{
             const id = req.params.id
@@ -76,7 +75,49 @@ class utilizador {
         }
     }
 
-    //TODO fazer ler/eliminar notificaçoes
+    async getNotficaçoes(req,res) {
+        try{
+            const id = req.user.userId
+            const item = await this.utilizadorDao.getItem(id)
+
+            const notficacoesNaoLidas = (item.Notficaçoes || []).filter(n => !n.lida)
+
+            res.status(200).json(notficacoesNaoLidas)
+        }catch(err){
+            console.log(err)
+            res.status(500).json({mensagem:""})
+        }
+    }
+
+    async eliminarNotificações(req,res) {
+        try {
+            // Buscar o utilizador pelo ID
+            const { resource: utilizador } = await containerUtilizadores.item(utilizadorId, partitionKeyValue).read();
+        
+            const item = await this.utilizadorDao.getItem(req.user.userId)
+
+            if (!item) {
+              console.log("Utilizador não encontrado");
+              return { status: 404, message: "Utilizador não encontrado" };
+            }
+        
+            // Atualizar todas as notificações
+            if (Array.isArray(item.Notficaçoes)) {
+                item.Notficaçoes = item.Notficaçoes.map(n => ({
+                ...n,
+                lida: true
+              }));
+            }
+        
+            // Substituir o documento no Cosmos DB
+            await this.utilizadorDao.updateItem(req.user.userId,item)
+        
+            res.status(200).json({mensagem:"Notificações marcadas como lidas com sucesso"})
+          } catch (error) {
+            console.error( error);
+            res.status(500).json({mensagem:"Erro ao marcar notificaçoes"}) 
+          }
+    }
 
     async loginUtilizador(req,res) {
         try{

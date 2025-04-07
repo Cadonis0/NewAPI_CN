@@ -1,6 +1,8 @@
 const express = require('express');
 const recitasRoute = require('./routes/receita.route')
 const utilizadorRoute = require('./routes/utilizador.route')
+const authRoute = require('./routes/auth.route')
+
 const {auth} = require('./middleware/authentication')
 
 require('dotenv').config();
@@ -9,13 +11,11 @@ require('dotenv').config();
 const app = express();
 app.use(express.json())
 
+app.listen(5000)
+
+app.use('/api/v1/auth',authRoute)
 app.use('/api/v1/receitas',recitasRoute)
 app.use('/api/v1/utilizadores',utilizadorRoute)
-
-
-//app.get('/api/v1/recitas/publicas',(req,res) => receita.showReceitasPublicas(req,res))
-//app.post('/api/v1/receitas',(req,res) => receita.addReceita(req,res))
-
 
 
 module.exports = app;

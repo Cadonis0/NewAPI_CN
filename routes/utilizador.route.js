@@ -25,9 +25,6 @@ utilizadorDao
 
 const router = express.Router();
 
-router.route('/login')
-    .post((req,res) => utilizador.loginUtilizador(req,res))
-
 router.route('/')
     .get((req,res) => utilizador.getUtilizadores(req,res))
     .post((req,res) => utilizador.createUtilizador(req,res))
