@@ -84,7 +84,7 @@ class receita {
             */
 
             const item = req.body;
-            item.IdUtilizador = req.user.userId
+            //item.IdUtilizador = req.user.userId
 
             const saved = await this.receitaDao.addItem(item);
             res.status(201).json(saved)
