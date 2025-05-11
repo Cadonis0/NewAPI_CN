@@ -4,6 +4,9 @@ const config = require('../config')
 const ReceitaDao = require('../models/receitaDao')
 const Receita = require('../controllers/receita.controller')
 
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() });
+
 const cosmosClient = new CosmosClient({
     endpoint: config.host,
     key: config.authKey
@@ -25,7 +28,6 @@ receitaDao
 
 const router = express.Router();
 
-
 router.route('/publicas')
     .get((req,res) => receita.showReceitasPublicas(req,res))
 
@@ -34,8 +36,10 @@ router.route('/like/:id')
 
 router.route('/')
     .get((req,res) => receita.showRecitasUtilizador(req,res))
-    .post((req,res) => receita.addReceita(req,res))
+    .post(upload.single('imagem'),
+        (req,res) => receita.addReceita(req,res))
 
+//TODO editar image
 router.route('/:id')
     .get((req,res) => receita.getRecitaId(req,res))
     .put((req,res) => receita.editRecita(req,res))

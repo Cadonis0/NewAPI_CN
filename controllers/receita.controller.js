@@ -1,9 +1,24 @@
 const receitaDao = require("../models/receitaDao")
 const { BlobServiceClient } = require('@azure/storage-blob');
-const multer = require('multer');
 
-const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
-const containerName = 'imagens';
+const path = require('path');
+
+const blobServiceClient = BlobServiceClient.fromConnectionString(
+    process.env.AZURE_STORAGE_CONNECTION_STRING
+);
+const containerClient = blobServiceClient.getContainerClient(
+    process.env.AZURE_STORAGE_CONTAINER
+);
+
+async function ensureContainer() {
+    if (!(await containerClient.exists())) {
+        await containerClient.create({ access: 'container' });
+        console.log(`Container criado: ${process.env.AZURE_STORAGE_CONTAINER}`);
+    }
+}
+ensureContainer().catch(console.error);
+
+
 
 class receita {
 
@@ -68,24 +83,22 @@ class receita {
     //TODO fazer parte da image
     async addReceita(req, res) {
         try{
-
-            /*
-            const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING);
-            const containerClient = blobServiceClient.getContainerClient(containerName);
-            
-            const blobName = Date.now() + "-" + req.file.originalname;
-            const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-            
-            await blockBlobClient.uploadData(req.file.buffer, {
-                blobHTTPHeaders: { blobContentType: req.file.mimetype },
-              });
-            
-            console.log(blockBlobClient.url)
-            */
-
             const item = req.body;
-            //item.IdUtilizador = req.user.userId
 
+            if (req.file) {
+                // cria nome único
+                const blobName = `${Date.now()}${path.extname(req.file.originalname).toLowerCase()}`;
+                const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+                await blockBlobClient.upload(req.file.buffer, req.file.size, {
+                    blobHTTPHeaders: { blobContentType: req.file.mimetype }
+                });
+
+                // URL pública
+                item.imagemUrl = blockBlobClient.url;
+            }
+
+            //item.IdUtilizador = req.user.userId
             const saved = await this.receitaDao.addItem(item);
             res.status(201).json(saved)
         }catch(err){
