@@ -21,7 +21,7 @@ const app = express();
 app.use(cors())
 app.use(express.json())
 
-app.listen(5000)
+app.listen(process.env.PORT||4000)
 
 app.use('/api/v1/auth',authRoute)
 app.use('/api/v1/receitas',recitasRoute)
