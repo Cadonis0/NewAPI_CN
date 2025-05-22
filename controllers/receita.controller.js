@@ -27,6 +27,7 @@ class receita {
         this.receitaDao = receitaDao
     }
 
+
     async showReceitasPublicas(req,res){
         try{
             const querySpec = {
@@ -34,7 +35,7 @@ class receita {
                 parameters: [
                     {
                         name: "@publicado",
-                        value: true
+                        value: "true"
                     }
                 ]
             }
@@ -47,9 +48,11 @@ class receita {
         }
     }
 
-
     async showRecitasUtilizador(req, res){
+
+
         try{
+            console.log(req.user.userId)
             const querySpec = {
                 query: "SELECT * FROM Receitas r WHERE r.IdUtilizador=@utilizador",
                 parameters: [
@@ -67,7 +70,6 @@ class receita {
             res.status(500).json({mensagem:"Erro a receber receitas do utilizador"})
         }
     }
-
 
     async getRecitaId(req,res){
         try{
@@ -161,7 +163,6 @@ class receita {
             res.status(500).json({mensagem:"Erro ao eliminar recita"})
         }
     }
-    
 
 }
 

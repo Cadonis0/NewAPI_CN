@@ -34,7 +34,6 @@ class utilizador {
         }
     }
 
-
     async createUtilizador(req, res) {
         try{
             const item = req.body
@@ -133,17 +132,15 @@ class utilizador {
             }
             const item = await this.utilizadorDao.find(querySpec)
 
-            console.log(req.body.Password)
-            console.log(item)
 
             const correctPassowrd = await bcrypt.compare(req.body.Password,item[0].Password)
 
             if(!correctPassowrd){
                 return res.status(404).json({mensagem:"Email ou password errado"})
             }
-    
-            const token = jwt.sign({id:item.id},process.env.JWT_SECRET,{expiresIn: process.env.JWT_LIFETIME})
-    
+
+            const token = jwt.sign({id:item[0].id},process.env.JWT_SECRET,{expiresIn: process.env.JWT_LIFETIME})
+
             res.status(200).json({token})
 
         }catch(err){

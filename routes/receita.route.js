@@ -41,7 +41,7 @@ router.route('/')
 
 //TODO editar image
 router.route('/:id')
-    .get(auth,(req,res) => receita.getRecitaId(req,res))
+    .get((req,res) => receita.getRecitaId(req,res))
     .put(auth,(req,res) => receita.editRecita(req,res))
     .delete(auth,(req,res) => receita.eliminarReceita(req,res))
 
