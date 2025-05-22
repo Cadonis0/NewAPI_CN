@@ -115,7 +115,7 @@ class receita {
             const idReceita    = req.params.id;
             const idUtilizador = req.user.userId;
             // you’ll need to figure out who owns the receita:
-            const receita      = await this.receitaDao.getRecitaId(idReceita);
+            const receita      = await this.receitaDao.getItem(idReceita);
             const idDono       = receita.IdUtilizador;
             const linkFunction = process.env.LINKFUNCTION;
 
@@ -139,7 +139,7 @@ class receita {
                     .status(500)
                     .json({ mensagem: 'Falha ao notificar o dono da receita' });
             }
-            
+
 
             return res.status(200).json({ mensagem: 'Gostado com sucesso' });
         }catch(err){
