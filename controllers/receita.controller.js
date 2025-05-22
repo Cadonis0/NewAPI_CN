@@ -112,27 +112,36 @@ class receita {
 
     async likeRecita(req, res) {
         try{
-            const idReceita = req.params.id
-            const idUtilizador = req.user.userId
-            const linkFunction = process.env.LINKFUNCTION
+            const idReceita    = req.params.id;
+            const idUtilizador = req.user.userId;
+            // you’ll need to figure out who owns the receita:
+            const receita      = await this.receitaDao.getRecitaId(idReceita);
+            const idDono       = receita.IdUtilizador;
+            const linkFunction = process.env.LINKFUNCTION;
 
-            await this.receitaDao.likeItem(idReceita)
+            // first do your local like
+            await this.receitaDao.likeItem(idReceita);
 
-            //TODO fazer pedido ao function
-            /*
-            const resp = await fetch(linkFunction,{
+            // then notify Azure Function
+            const resp = await fetch(linkFunction, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    UtilizadorGostou:idUtilizador,
-                    IdReceita:idReceita,
-                    lida:false
+                    idDono,
+                    idReceita,
+                    idUtilizadorGostou: idUtilizador
                 })
-            })
-            const resposta = resp.json()*/
-            //if()
+            });
 
-            res.status(200).json({mensagem:"Gostado com sucesso"})
+            if (!resp.ok) {
+                console.error('Function error:', resp.status, await resp.text());
+                return res
+                    .status(500)
+                    .json({ mensagem: 'Falha ao notificar o dono da receita' });
+            }
+            
+
+            return res.status(200).json({ mensagem: 'Gostado com sucesso' });
         }catch(err){
             console.log(err)
             res.status(500).json({mensagem:"Erro a dar gosto na receita"})
