@@ -114,16 +114,14 @@ class receita {
         try{
             const idReceita    = req.params.id;
             const idUtilizador = req.user.userId;
-            // you’ll need to figure out who owns the receita:
             const receita      = await this.receitaDao.getItem(idReceita);
             const idDono       = receita.IdUtilizador;
             const linkFunction = process.env.LINKFUNCTION;
 
-            // first do your local like
             await this.receitaDao.likeItem(idReceita);
 
-            // then notify Azure Function
-            const resp = await fetch(linkFunction, {
+            const finalLink = `${linkFunction}/api/mandarNotificacao`;
+            const resp = await fetch(finalLink, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

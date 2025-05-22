@@ -3,6 +3,7 @@ const CosmosClient = require('@azure/cosmos').CosmosClient
 const config = require('../config')
 const UtilizadorDao = require('../models/utilizadorDao')
 const Utilizador = require('../controllers/utilizador.controller')
+const {auth} = require('../middleware/authentication')
 
 const cosmosClient = new CosmosClient({
     endpoint: config.host,
@@ -24,6 +25,10 @@ utilizadorDao
   })
 
 const router = express.Router();
+
+router.route('/notficacoes')
+    .get(auth,(req,res) => utilizador.getNotficacoes(req,res))
+    .delete(auth,(req,res) => utilizador.eliminarNotificacoes(req,res))
 
 router.route('/')
     .get((req,res) => utilizador.getUtilizadores(req,res))

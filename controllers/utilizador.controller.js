@@ -74,7 +74,7 @@ class utilizador {
         }
     }
 
-    async getNotficaçoes(req,res) {
+    async getNotficacoes(req,res) {
         try{
             const id = req.user.userId
             const item = await this.utilizadorDao.getItem(id)
@@ -88,7 +88,7 @@ class utilizador {
         }
     }
 
-    async eliminarNotificações(req,res) {
+    async eliminarNotificacoes(req,res) {
         try {
             // Buscar o utilizador pelo ID
             const { resource: utilizador } = await containerUtilizadores.item(utilizadorId, partitionKeyValue).read();
