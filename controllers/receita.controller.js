@@ -119,7 +119,7 @@ class receita {
             await this.receitaDao.likeItem(idReceita)
 
             //TODO fazer pedido ao function
-            
+            /*
             const resp = await fetch(linkFunction,{
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -129,7 +129,7 @@ class receita {
                     lida:false
                 })
             })
-            const resposta = resp.json()
+            const resposta = resp.json()*/
             //if()
 
             res.status(200).json({mensagem:"Gostado com sucesso"})
