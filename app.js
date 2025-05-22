@@ -6,9 +6,11 @@ const cors = require('cors')
 const { BlobServiceClient } = require('@azure/storage-blob');
 
 
-const {auth} = require('./middleware/authentication')
+
 
 require('dotenv').config();
+const app = express();
+
 
 async function createContainer(blobServiceClient, containerName){
 
@@ -17,7 +19,7 @@ async function createContainer(blobServiceClient, containerName){
     return containerClient;
 }
 
-const app = express();
+
 app.use(cors())
 app.use(express.json())
 

@@ -1,6 +1,7 @@
 const receitaDao = require("../models/receitaDao")
 const { BlobServiceClient } = require('@azure/storage-blob');
 
+
 const path = require('path');
 
 const blobServiceClient = BlobServiceClient.fromConnectionString(
@@ -29,7 +30,7 @@ class receita {
     async showReceitasPublicas(req,res){
         try{
             const querySpec = {
-                query: "SELECT * FROM receitas r WHERE r.Publico=@publicado",
+                query: "SELECT * FROM Receitas r WHERE r.Publico=@publicado",
                 parameters: [
                     {
                         name: "@publicado",
@@ -50,7 +51,7 @@ class receita {
     async showRecitasUtilizador(req, res){
         try{
             const querySpec = {
-                query: "SELECT * FROM recitas r WHERE IdUtilizador=@utilizador",
+                query: "SELECT * FROM Receitas r WHERE r.IdUtilizador=@utilizador",
                 parameters: [
                     {
                         name: "@utilizador",
@@ -80,7 +81,6 @@ class receita {
         }
     }
 
-    //TODO fazer parte da image
     async addReceita(req, res) {
         try{
             const item = req.body;
@@ -98,7 +98,8 @@ class receita {
                 item.imagemUrl = blockBlobClient.url;
             }
 
-            //item.IdUtilizador = req.user.userId
+
+            item.IdUtilizador = req.user.userId
             const saved = await this.receitaDao.addItem(item);
             res.status(201).json(saved)
         }catch(err){
