@@ -90,8 +90,6 @@ class utilizador {
 
     async eliminarNotificacoes(req,res) {
         try {
-            // Buscar o utilizador pelo ID
-            const { resource: utilizador } = await containerUtilizadores.item(utilizadorId, partitionKeyValue).read();
         
             const item = await this.utilizadorDao.getItem(req.user.userId)
 
@@ -101,8 +99,8 @@ class utilizador {
             }
         
             // Atualizar todas as notificações
-            if (Array.isArray(item.Notficaçoes)) {
-                item.Notficaçoes = item.Notficaçoes.map(n => ({
+            if (Array.isArray(item.Notificaçoes)) {
+                item.Notificaçoes = item.Notificaçoes.map(n => ({
                 ...n,
                 lida: true
               }));
