@@ -78,10 +78,8 @@ class utilizador {
         try{
             const id = req.user.userId
             const item = await this.utilizadorDao.getItem(id)
-            //console.log(item.Notificacoes)
 
             const notficacoesNaoLidas = (item.Notificacoes || []).filter(n => n.lida === false)
-            console.log(notficacoesNaoLidas)
 
             res.status(200).json(notficacoesNaoLidas)
         }catch(err){
