@@ -97,14 +97,16 @@ class utilizador {
               console.log("Utilizador não encontrado");
               return { status: 404, message: "Utilizador não encontrado" };
             }
-        
+
+            item.Notificaçoes = [];
+
             // Atualizar todas as notificações
-            if (Array.isArray(item.Notificaçoes)) {
+            /*if (Array.isArray(item.Notificaçoes)) {
                 item.Notificaçoes = item.Notificaçoes.map(n => ({
                 ...n,
                 lida: true
               }));
-            }
+            }*/
         
             // Substituir o documento no Cosmos DB
             await this.utilizadorDao.updateItem(req.user.userId,item)
