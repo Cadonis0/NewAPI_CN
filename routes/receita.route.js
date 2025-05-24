@@ -42,7 +42,8 @@ router.route('/')
 //TODO editar image
 router.route('/:id')
     .get((req,res) => receita.getRecitaId(req,res))
-    .put(auth,(req,res) => receita.editRecita(req,res))
+    .put(auth,upload.single('imagem')
+        ,(req,res) => receita.editRecita(req,res))
     .delete(auth,(req,res) => receita.eliminarReceita(req,res))
 
 module.exports = router

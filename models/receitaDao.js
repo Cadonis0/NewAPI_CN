@@ -55,12 +55,13 @@ class receitaDao {
   }
 
   async updateItem(itemId, item) {
-    console.log('Update an item in the database')
+      console.log('Update an item in the database')
+      console.log(item)
 
-    const { resource: replaced } = await this.container
-      .item(itemId, partitionKey)
-      .replace(item)
-    return replaced
+      const { resource: replaced } = await this.container
+          .item(itemId, partitionKey)
+          .replace(item)
+      return replaced
   }
 
   async likeItem(itemId) {

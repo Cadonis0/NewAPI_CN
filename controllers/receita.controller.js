@@ -149,12 +149,27 @@ class receita {
     async editRecita(req, res){
         try{
             const id = req.params.id
+            console.log(id)
             const item = req.body
 
+            if (req.file) {
+                // cria nome único
+                const blobName = `${Date.now()}${path.extname(req.file.originalname).toLowerCase()}`;
+                const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+                await blockBlobClient.upload(req.file.buffer, req.file.size, {
+                    blobHTTPHeaders: { blobContentType: req.file.mimetype }
+                });
+
+                // URL pública
+                item.imagemUrl = blockBlobClient.url;
+            }
+
             await this.receitaDao.updateItem(id,item)
+
             res.status(200).json({mensagem:"Editado com sucesso"})
         }catch(err){
-            console.log(err)
+            //console.log(err)
             res.status(500).json({mensagem:"Erro a editar receita"})
         }
     }
