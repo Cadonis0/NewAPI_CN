@@ -120,7 +120,8 @@ class receita {
 
             await this.receitaDao.likeItem(idReceita);
 
-            const finalLink = `${linkFunction}/api/mandarNotificacao`;
+            const finalLink = `https://${linkFunction}/api/mandarNotificacao`;
+            console.log(finalLink)
             const resp = await fetch(finalLink, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -166,11 +167,12 @@ class receita {
                 item.imagemUrl = blockBlobClient.url;
             }
 
+            item.IdUtilizador = req.user.userId
             await this.receitaDao.updateItem(id,item)
 
             res.status(200).json({mensagem:"Editado com sucesso"})
         }catch(err){
-            //console.log(err)
+            console.log(err)
             res.status(500).json({mensagem:"Erro a editar receita"})
         }
     }
