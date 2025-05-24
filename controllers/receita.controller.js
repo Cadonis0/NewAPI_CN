@@ -162,6 +162,7 @@ class receita {
                 });
 
                 // URL pública
+                item.id = id
                 item.imagemUrl = blockBlobClient.url;
             }
 
